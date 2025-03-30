@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="title" content="BitBox - Browser VM" />
+  <meta name="email" content="daipham.3213@gmail.com" />
+  <meta name="author" content="Dai Pham" />
+  <meta name="description" content="BitBox - Browser VM" />
+  <meta name="keywords" content="BitBox, Browser VM, Virtual Machine, WebAssembly, V86, x86, WASM/WASI" />
+  <meta name="github" content="https://github.com/daipham3213">
+  <meta name="opendev.org" content="https://review.opendev.org/q/owner:daipham.3213@gmail.com">
+  <meta name="linkedin" content="www.linkedin.com/in/daipham-3213">
+  <link rel="icon" href="/favico.svg" type="image/png" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="en" />
+  <style>
+    @import "src/styles/app.css";
+  </style>
+  <title>BitBox - Browser VM</title>
+</head>
+
+<body>
+  <div id="terminal-container">
+    <div id="terminal-toolbar">
+      <span class="toolbar-title">BitBox</span>
+      <span id="emulator-state" class="toolbar-state"></span>
+      <div id="toolbar-buttons" class="toolbar-buttons">
+        <a class="toolbar-button" href="https://github.com/daipham3213" _target="_blank" rel="noopener noreferrer">
+          <img class="botton-img" id="github" alt="GitHub - daipham3213" src="/img/github.svg" width="16" height="16" />
+        </a>
+        <a class="toolbar-button" href="https://review.opendev.org/q/owner:daipham.3213@gmail.com" _target="_blank" rel="noopener noreferrer">
+          <img class="button-img" id="opendev" alt="OpenDev - daipham.3213@gmail.com" src="/img/opendev.svg" width="16" height="16" />
+        </a>
+        <a class="toolbar-button" href="https://www.linkedin.com/in/daipham-3213" _target="_blank" rel="noopener noreferrer">
+          <img class="button-img" id="linkedin" alt="LinkedIn - daipham-3213" src="/img/linkedin.svg" width="16" height="16" />
+        </a>
+      </div>
+    </div>
+    <div id="terminal"></div>
+    <div id="serial">
+      <div id="serial-output">
+        <h6>Loading resources, please wait...</h6>
+      </div>
+      <canvas id="serial-canvas" width="800" height="600"></canvas>
+    </div>
+  </div>
+  <script src="/v86/libv86.js"></script>
+  <script type="module" src="/src/js/main.js"></script>
+</body>
+
+</html>

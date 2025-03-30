@@ -1,0 +1,32 @@
+@import 'the-new-css-reset/css/reset.css';
+@import '@xterm/xterm/css/xterm.css';
+@import 'terminal.css';
+@import 'terminal-toolbar.css';
+@import 'serial.css';
+
+html,
+body {
+  height: 100%;
+  font-family: monospace;
+  background-color: #242424;
+  color: #f0f0f0;
+  overflow: hidden;
+
+  --background-color: #242424;
+  --button-background-color: #444;
+  --button-hover-color: #555;
+  --button-active-color: #333;
+  --button-border-color: #555;
+  --button-text-color: #eee;
+  --border-color: #3a3a3a;
+  --toolbar-background-color: #2d2d2d;
+  --toolbar-text-color: #ccc;
+  --termnial-background-color: #161618;
+}
+
+body {
+  /* Still centers the main container on desktop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
