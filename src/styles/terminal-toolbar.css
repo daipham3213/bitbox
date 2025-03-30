@@ -1,0 +1,28 @@
+#terminal-toolbar {
+  flex-shrink: 0;
+  height: 35px;
+  background-color: var(--toolbar-background-color);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: #ccc;
+}
+
+.toolbar-state {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.toolbar-title {
+  font-size: 13px;
+  font-family: sans-serif;
+  color: var(--toolbar-text-color);
+}
+
+.toolbar-button {
+  border: none;
+  color: var(--toolbar-text-color);
+  cursor: pointer;
+  font-size: 13px;
+}

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="title" content="BitBox - Browser VM" />
+  <meta name="email" content="daipham.3213@gmail.com" />
+  <meta name="author" content="Dai Pham" />
+  <meta name="description" content="BitBox - Browser VM" />
+  <meta name="keywords" content="BitBox, Browser VM, Virtual Machine, WebAssembly, V86, x86, WASM/WASI" />
+  <meta name="github" content="https://github.com/daipham3213">
+  <meta name="opendev.org" content="https://review.opendev.org/q/owner:daipham.3213@gmail.com">
+  <meta name="linkedin" content="www.linkedin.com/in/daipham-3213">
+  <link rel="icon" href="/favico.svg" type="image/png" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="en" />
+  <style>:where(:not(html,iframe,canvas,img,svg,video,audio):not(svg *,symbol *)){all:unset;display:revert}*,:after,:before{box-sizing:border-box}html{-moz-text-size-adjust:none;-webkit-text-size-adjust:none;text-size-adjust:none}a,button{cursor:revert}menu,ol,summary,ul{list-style:none}ol{counter-reset:revert}img{max-block-size:100%;max-inline-size:100%}table{border-collapse:collapse}input,textarea{-webkit-user-select:auto}textarea{white-space:revert}meter{-webkit-appearance:revert;-moz-appearance:revert;appearance:revert}:where(pre){all:revert;box-sizing:border-box}::-moz-placeholder{color:unset}::placeholder{color:unset}:where([hidden]){display:none}:where([contenteditable]:not([contenteditable=false])){-moz-user-modify:read-write;-webkit-user-modify:read-write;-webkit-line-break:after-white-space;overflow-wrap:break-word;-webkit-user-select:auto}:where([draggable=true]){-webkit-user-drag:element}:where(dialog:modal){all:revert;box-sizing:border-box}::-webkit-details-marker{display:none}.xterm{cursor:text;position:relative;-moz-user-select:none;user-select:none;-ms-user-select:none;-webkit-user-select:none}.xterm.focus,.xterm:focus{outline:none}.xterm .xterm-helpers{position:absolute;top:0;z-index:5}.xterm .xterm-helper-textarea{border:0;height:0;left:-9999em;margin:0;opacity:0;overflow:hidden;padding:0;position:absolute;resize:none;top:0;white-space:nowrap;width:0;z-index:-5}.xterm .composition-view{background:#000;color:#fff;display:none;position:absolute;white-space:nowrap;z-index:1}.xterm .composition-view.active{display:block}.xterm .xterm-viewport{background-color:#000;bottom:0;cursor:default;left:0;position:absolute;right:0;top:0}.xterm .xterm-screen{position:relative}.xterm .xterm-screen canvas{left:0;position:absolute;top:0}.xterm .xterm-scroll-area{visibility:hidden}.xterm-char-measure-element{display:inline-block;left:-9999em;line-height:normal;position:absolute;top:0;visibility:hidden}.xterm.enable-mouse-events{cursor:default}.xterm .xterm-cursor-pointer,.xterm.xterm-cursor-pointer{cursor:pointer}.xterm.column-select.focus{cursor:crosshair}.xterm .xterm-accessibility:not(.debug),.xterm .xterm-message{bottom:0;color:transparent;left:0;pointer-events:none;position:absolute;right:0;top:0;z-index:10}.xterm .xterm-accessibility-tree:not(.debug) ::-moz-selection{color:transparent}.xterm .xterm-accessibility-tree:not(.debug) ::selection{color:transparent}.xterm .xterm-accessibility-tree{-webkit-user-select:text;-moz-user-select:text;user-select:text;white-space:pre}.xterm .live-region{height:1px;left:-9999px;overflow:hidden;position:absolute;width:1px}.xterm-dim{opacity:1!important}.xterm-underline-1{text-decoration:underline}.xterm-underline-2{-webkit-text-decoration:double underline;text-decoration:double underline}.xterm-underline-3{-webkit-text-decoration:wavy underline;text-decoration:wavy underline}.xterm-underline-4{-webkit-text-decoration:dotted underline;text-decoration:dotted underline}.xterm-underline-5{-webkit-text-decoration:dashed underline;text-decoration:dashed underline}.xterm-overline{text-decoration:overline}.xterm-overline.xterm-underline-1{text-decoration:overline underline}.xterm-overline.xterm-underline-2{-webkit-text-decoration:overline double underline;text-decoration:overline double underline}.xterm-overline.xterm-underline-3{-webkit-text-decoration:overline wavy underline;text-decoration:overline wavy underline}.xterm-overline.xterm-underline-4{-webkit-text-decoration:overline dotted underline;text-decoration:overline dotted underline}.xterm-overline.xterm-underline-5{-webkit-text-decoration:overline dashed underline;text-decoration:overline dashed underline}.xterm-strikethrough{text-decoration:line-through}.xterm-screen .xterm-decoration-container .xterm-decoration{position:absolute;z-index:6}.xterm-screen .xterm-decoration-container .xterm-decoration.xterm-decoration-top-layer{z-index:7}.xterm-decoration-overview-ruler{pointer-events:none;position:absolute;right:0;top:0;z-index:8}.xterm-decoration-top{position:relative;z-index:2}#terminal-container{background-color:var(
+    --terminal-background-color
+  );border:1px solid var(--border-color);border-radius:4px;box-shadow:0 4px 15px rgba(0,0,0,.4);display:flex;flex-direction:column;height:70vh;max-width:900px;min-height:400px;overflow:hidden;transition:all .3s ease;width:80%}#terminal{flex-grow:1;height:100%;min-height:0;width:100%}.xterm{height:100%!important;padding:5px}.xterm .xterm-viewport{overflow-y:scroll;width:100%!important}.xterm-viewport::-webkit-scrollbar{width:8px}.xterm-viewport::-webkit-scrollbar-track{background:#333}.xterm-viewport::-webkit-scrollbar-thumb{background-color:#555;border-radius:4px}@media (max-width:768px){body{align-items:flex-start;padding:0}#terminal-container{border:none;border-radius:0;box-shadow:none;height:100vh;max-width:none;min-height:0;width:100%}#terminal-toolbar{height:40px;padding:0 8px}#terminal-toolbar button{padding:5px 10px}.xterm{padding:2px}}#terminal-toolbar{align-items:center;background-color:var(--toolbar-background-color);border-bottom:1px solid var(--border-color);color:#ccc;display:flex;flex-shrink:0;height:35px;padding:0 10px}.toolbar-state{flex-grow:1;text-align:center}.toolbar-title{font-family:sans-serif}.toolbar-button,.toolbar-title{color:var(--toolbar-text-color);font-size:13px}.toolbar-button{border:none;cursor:pointer}#serial{background:#000;flex-grow:1;height:100%;min-height:0;width:100%}#serial-output{align-items:center;display:flex;height:100%;justify-content:center;width:100%}body,html{background-color:#242424;color:#f0f0f0;font-family:monospace;height:100%;overflow:hidden;--background-color:#242424;--button-background-color:#444;--button-hover-color:#555;--button-active-color:#333;--button-border-color:#555;--button-text-color:#eee;--border-color:#3a3a3a;--toolbar-background-color:#2d2d2d;--toolbar-text-color:#ccc;--termnial-background-color:#161618}body{align-items:center;display:flex;justify-content:center}</style>
+  <title>BitBox - Browser VM</title>
+  <script type="module" crossorigin src="/assets/main-Ck3upyFh.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/@xterm-BcztChOp.js">
+</head>
+
+<body>
+  <div id="terminal-container">
+    <div id="terminal-toolbar">
+      <span class="toolbar-title">BitBox</span>
+      <span id="emulator-state" class="toolbar-state"></span>
+      <div id="toolbar-buttons" class="toolbar-buttons">
+        <a class="toolbar-button" href="https://github.com/daipham3213" _target="_blank" rel="noopener noreferrer">
+          <img class="botton-img" id="github" alt="GitHub - daipham3213" src="/img/github.svg" width="16" height="16" />
+        </a>
+        <a class="toolbar-button" href="https://review.opendev.org/q/owner:daipham.3213@gmail.com" _target="_blank" rel="noopener noreferrer">
+          <img class="button-img" id="opendev" alt="OpenDev - daipham.3213@gmail.com" src="/img/opendev.svg" width="16" height="16" />
+        </a>
+        <a class="toolbar-button" href="https://www.linkedin.com/in/daipham-3213" _target="_blank" rel="noopener noreferrer">
+          <img class="button-img" id="linkedin" alt="LinkedIn - daipham-3213" src="/img/linkedin.svg" width="16" height="16" />
+        </a>
+      </div>
+    </div>
+    <div id="terminal"></div>
+    <div id="serial">
+      <div id="serial-output">
+        <h6>Loading resources, please wait...</h6>
+      </div>
+      <canvas id="serial-canvas" width="800" height="600"></canvas>
+    </div>
+  </div>
+  <script src="/v86/libv86.js"></script>
+</body>
+
+</html>
