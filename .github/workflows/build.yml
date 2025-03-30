@@ -3,6 +3,21 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  VITE_EMULATOR_VGA: 16
+  VITE_EMULATOR_RAM: 128
+  VITE_NETWORK_RELAY: 'wss://relay.widgetry.org/'
+  VITE_ROOTFS_ISO: 'https://rawcdn.githack.com/daipham3213/bitbox-buildroot/7a285bad23e998129509059ae72b8f4fd9404dac/rootfs.iso?min=1'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,20 +30,41 @@ jobs:
         run: bun install
       - name: 'Run tests'
         run: bun run lint
+      - name: 'Create ENV'
+        run: |
+          touch .env
+          echo "VITE_EMULATOR_VGA=${{ env.VITE_EMULATOR_VGA }}" >> .env
+          echo "VITE_EMULATOR_RAM=${{ env.VITE_EMULATOR_RAM }}" >> .env
+          echo "VITE_NETWORK_RELAY=${{ env.VITE_NETWORK_RELAY }}" >> .env
+          echo "VITE_ROOTFS_ISO=${{ env.VITE_ROOTFS_ISO }}" >> .env
       - name: 'Build project'
         run: bun run build
       - name: 'Upload build artifacts'
         uses: actions/upload-artifact@v4
         with:
           name: 'build-artifacts'
-          path: 'dist/*'
+          path: './dist/*'
   deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      id-token: write
+      pages: write
+      contents: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: 'Getting artifacts'
+        uses: actions/download-artifact@v4
+        with:
+          name: 'build-artifacts'
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
