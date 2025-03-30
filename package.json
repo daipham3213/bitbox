@@ -6,8 +6,8 @@
   "keywords": [],
   "scripts": {
     "dev": "vite --host --open",
-    "lint": "eslint --ext .js ./",
-    "lint:fix": "eslint --fix --ext .js ./",
+    "lint": "eslint --ext .js ./src",
+    "lint:fix": "eslint --fix --ext .js ./src",
     "format": "prettier --write \"./**/*.{js,jsx,json,css}\"",
     "build": "vite build",
     "preview": "vite preview --open",
