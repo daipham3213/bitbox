@@ -18,9 +18,6 @@ const override = () => {
           black: '#21222C',
           brightBlack: '#6272A4',
         },
-        // Tell xterm how many rows/cols (FitAddon will adjust this)
-        rows: 30,
-        cols: 80,
         allowProposedApi: true,
       };
       super({ ...defaultOptions, ...options });
@@ -66,9 +63,7 @@ const loadAddons = (terminal) => {
   terminal.loadAddon(unicode11Addon);
   terminal.loadAddon(clipboardAddon);
 
-  document.addEventListener('DOMContentLoaded', () => {
-    fitAddon.fit();
-  });
+  fitAddon.fit();
 
   // eslint-disable-next-line no-param-reassign
   terminal.unicode.activeVersion = '11';

@@ -1,4 +1,5 @@
-import { override, loadAddons } from './terminal';
+import { loadAddons, override } from './terminal';
+import registerUploadFilesModal from './upload-files';
 
 override();
 
@@ -22,7 +23,13 @@ const emulator = new window.V86({
     url: import.meta.env.VITE_ROOTFS_ISO,
     async: false,
   },
+  filesystem: {
+    basefs: '/contents.json',
+    baseurl: '/flat',
+  },
   autostart: true,
+  disable_keyboard: true,
+  disable_speaker: true,
   network_relay_url: import.meta.env.VITE_NETWORK_RELAY,
 });
 
@@ -41,6 +48,7 @@ emulator.add_listener('serial0-output-byte', (byte) => {
     state.textContent = '';
 
     loadAddons(emulator.serial_adapter.term);
+    registerUploadFilesModal({ emulator });
     terminalElement.focus();
   }
 });
