@@ -13,7 +13,6 @@ repository.
 
 - [v86](https://github.com/copy/v86)
 - [xterm.js](https://github.com/xtermjs/xterm.js)
-- [tailwindcss](https://tailwindcss.com/)
 - [bun](https://bun.sh)
 - [vite](https://vitejs.dev/)
 

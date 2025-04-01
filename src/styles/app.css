@@ -3,6 +3,7 @@
 @import 'terminal.css';
 @import 'terminal-toolbar.css';
 @import 'serial.css';
+@import 'app-modal.css';
 
 html,
 body {
