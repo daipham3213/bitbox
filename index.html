@@ -30,12 +30,17 @@
         <a class="toolbar-button" href="https://github.com/daipham3213" _target="_blank" rel="noopener noreferrer">
           <img class="botton-img" id="github" alt="GitHub - daipham3213" src="/img/github.svg" width="16" height="16" />
         </a>
-        <a class="toolbar-button" href="https://review.opendev.org/q/owner:daipham.3213@gmail.com" _target="_blank" rel="noopener noreferrer">
-          <img class="button-img" id="opendev" alt="OpenDev - daipham.3213@gmail.com" src="/img/opendev.svg" width="16" height="16" />
+        <a class="toolbar-button" href="https://review.opendev.org/q/owner:daipham.3213@gmail.com" _target="_blank"
+          rel="noopener noreferrer">
+          <img class="button-img" id="opendev" alt="OpenDev - daipham.3213@gmail.com" src="/img/opendev.svg" width="16"
+            height="16" />
         </a>
-        <a class="toolbar-button" href="https://www.linkedin.com/in/daipham-3213" _target="_blank" rel="noopener noreferrer">
-          <img class="button-img" id="linkedin" alt="LinkedIn - daipham-3213" src="/img/linkedin.svg" width="16" height="16" />
+        <a class="toolbar-button" href="https://www.linkedin.com/in/daipham-3213" _target="_blank"
+          rel="noopener noreferrer">
+          <img class="button-img" id="linkedin" alt="LinkedIn - daipham-3213" src="/img/linkedin.svg" width="16"
+            height="16" />
         </a>
+        <button id="upload-button" title="Upload File" style="display: none;">Upload</button>
       </div>
     </div>
     <div id="terminal"></div>
@@ -44,6 +49,20 @@
         <h6>Loading resources, please wait...</h6>
       </div>
       <canvas id="serial-canvas" width="800" height="600"></canvas>
+    </div>
+  </div>
+  <div id="modal-overlay">
+    <div id="upload-modal">
+      <button id="modal-close-button" title="Close">&times;</button>
+      <h3>Upload File</h3>
+      <div class="form-group">
+        <p> All files will be uploaded to `/home/daiplg` directory. </p>
+      </div>
+      <div class="form-group">
+        <button id="select-file-button">Select File...</button>
+        <input type="file" id="file-input" style="display: none;" multiple>
+        <span id="selected-filename">No file selected</span>
+      </div>
     </div>
   </div>
   <script src="/v86/libv86.js"></script>
