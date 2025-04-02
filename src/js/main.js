@@ -11,6 +11,8 @@ terminalElement.style.display = 'none';
 serial.style.display = 'block';
 
 let progressTicks = 0;
+window.started = false;
+
 const emulator = new window.V86({
   wasm_path: '/v86/v86.wasm',
   screen_container: serial,
@@ -25,7 +27,6 @@ const emulator = new window.V86({
   },
   filesystem: {
     basefs: '/contents.json',
-    baseurl: '/flat',
   },
   autostart: true,
   disable_keyboard: true,
@@ -40,16 +41,17 @@ if (import.meta.env.DEV) {
 emulator.add_listener('serial0-output-byte', (byte) => {
   const char = String.fromCharCode(byte);
 
-  if (char === '$' || char === '#') {
-    emulator.serial_adapter.term.write('\r\n');
+  if (char === '$' || char === '#' || char === ':') {
+    if (!window.started) {
+      window.started = true;
+      terminalElement.style.display = 'block';
+      serial.style.display = 'none';
+      state.textContent = '';
 
-    terminalElement.style.display = 'block';
-    serial.style.display = 'none';
-    state.textContent = '';
-
-    loadAddons(emulator.serial_adapter.term);
-    registerUploadFilesModal({ emulator });
-    terminalElement.focus();
+      loadAddons(emulator.serial_adapter.term);
+      registerUploadFilesModal({ emulator });
+      terminalElement.focus();
+    }
   }
 });
 

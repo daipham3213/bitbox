@@ -58,7 +58,7 @@ const registerUploadFilesModal = ({ emulator }) => {
   if (fileInput && selectedFilenameSpan) {
     fileInput.addEventListener('change', () => {
       if (fileInput.files.length > 0) {
-        selectFileButton.textContent = Array.from(fileInput.files).reduce(
+        selectedFilenameSpan.textContent = Array.from(fileInput.files).reduce(
           (acc, file, i) => {
             const separator = i === 0 ? '' : ', ';
             return `${separator}${file.name}`;
@@ -66,7 +66,7 @@ const registerUploadFilesModal = ({ emulator }) => {
         );
         Array.from(fileInput.files).forEach((_file) => {
           const reader = new FileReader();
-          const path = `/${_file.name}`;
+          const path = `/daiplg/${_file.name}`;
           reader.onload = (f) => {
             const data = new Uint8Array(f.target.result);
             return emulator.create_file(path, data);
