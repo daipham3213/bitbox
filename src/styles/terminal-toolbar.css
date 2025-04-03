@@ -26,3 +26,9 @@
   cursor: pointer;
   font-size: 13px;
 }
+
+.upload-button {
+  background-color: whitesmoke;
+  border-radius: 3px;
+  padding: 2px 4px;
+}

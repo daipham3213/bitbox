@@ -32,6 +32,7 @@ const emulator = new window.V86({
   disable_keyboard: true,
   disable_speaker: true,
   network_relay_url: import.meta.env.VITE_NETWORK_RELAY,
+  cmdline: 'tsc=reliable mitigations=off random.trust_cpu=on',
 });
 
 if (import.meta.env.DEV) {

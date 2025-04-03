@@ -9,6 +9,8 @@ utilities. You can find my configuration for buildroot in
 the [bitbox-buildroot](https://github.com/daipham3213/bitbox-buildroot)
 repository.
 
+<img src="docs/img/terminal.png">
+
 ## Libraries and tools used
 
 - [v86](https://github.com/copy/v86)
@@ -41,7 +43,7 @@ repository.
 
 - It's a bit slow. It is fine for running simple programs but as soon as you try to run anything that requires cpu it
   will slow down immensely because the cpu is emulated by v86.
-- No reliable package manager.
+- No reliable package manager. You can use the bundled [static-get](docs/static-get.md)
 
 # Internet
 
