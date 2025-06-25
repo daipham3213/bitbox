@@ -1,0 +1,33 @@
+/* xterm.js specific overrides for theme integration */
+.xterm {
+  height: 100%;
+  width: 100%;
+  padding: 0.25rem; /* Adjust padding to fit terminal content */
+}
+
+.xterm-viewport {
+  background-color: #282C34; /* Ensure background matches terminal window */
+}
+
+.xterm .xterm-rows {
+  font-family: 'Consolas', monospace;
+  color: #ABB2BF;
+}
+
+.xterm .xterm-cursor-block {
+  background-color: #ABB2BF;
+}
+
+.xterm-viewport::-webkit-scrollbar {
+  width: 8px;
+}
+
+.xterm-viewport::-webkit-scrollbar-track {
+  background: #333;
+}
+
+.xterm-viewport::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+

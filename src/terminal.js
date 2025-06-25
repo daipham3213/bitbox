@@ -10,19 +10,21 @@ const override = () => {
         cursorBlink: true,
         fontSize: 14,
         fontFamily: 'Consolas, monospace',
-        theme: {
-          background: '#161618',
-          foreground: '#f0f0f0',
-          cursor: '#f0f0f0',
-          selectionBackground: '#44475a',
-          black: '#21222C',
-          brightBlack: '#6272A4',
-        },
         allowProposedApi: true,
+        theme: {
+          background: '#282C34', // Main terminal background
+          foreground: '#ABB2BF', // Default text color
+          cursor: '#ABB2BF', // Cursor color
+          selectionBackground: '#61AFEF', // Highlight selection
+          blue: '#61AFEF', // For prompts if needed
+          green: '#98C379', // For prompts if needed
+          yellow: '#E5C07B', // For commands if needed
+        },
       };
       super({ ...defaultOptions, ...options });
     }
   }
+
   window.Terminal = BitBoxTerminal;
 };
 
@@ -64,6 +66,9 @@ const loadAddons = (terminal) => {
   terminal.loadAddon(clipboardAddon);
 
   fitAddon.fit();
+  window.addEventListener('resize', () => {
+    fitAddon.fit();
+  });
 
   // eslint-disable-next-line no-param-reassign
   terminal.unicode.activeVersion = '11';
