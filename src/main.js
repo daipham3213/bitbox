@@ -10,7 +10,6 @@ const currentDisplay = terminalElement.style.display;
 terminalElement.style.display = 'none';
 serial.style.display = 'block';
 
-// const progressTicks = 0;
 window.started = false;
 
 const emulator = new window.V86({
@@ -47,7 +46,14 @@ emulator.add_listener('serial0-output-byte', (byte) => {
       window.started = true;
       terminalElement.style.display = currentDisplay;
       serial.style.display = 'none';
-      // state.textContent = '';
+
+      document
+        .querySelectorAll('.is-stats-hidden')
+        .forEach((el) => el.classList.remove('is-stats-hidden'));
+
+      document.querySelectorAll('#progress-bar').forEach((el) => {
+        el.classList.add('is-hidden');
+      });
 
       loadAddons(emulator.serial_adapter.term);
       registerUploadFilesModal({ emulator });
@@ -56,43 +62,37 @@ emulator.add_listener('serial0-output-byte', (byte) => {
   }
 });
 
-// const showProgress = (e) => {
-//   const el = state;
-//   el.style.display = 'block';
-//
-//   if (e.file_name.endsWith('.wasm')) {
-//     const parts = e.file_name.split('/');
-//     el.textContent = `Fetching ${parts[parts.length - 1]} ...`;
-//     return;
-//   }
-//
-//   if (e.file_index === e.file_count - 1 && e.loaded >= e.total - 2048) {
-//     // last file is (almost) loaded
-//     el.textContent = 'Done downloading. Starting now ...';
-//     return;
-//   }
-//
-//   let line = 'Downloading images ';
-//
-//   if (typeof e.file_index === 'number' && e.file_count) {
-//     line += `[${e.file_index + 1}/${e.file_count}] `;
-//   }
-//
-//   if (e.total && typeof e.loaded === 'number') {
-//     let per100 = Math.floor((e.loaded / e.total) * 100);
-//     per100 = Math.min(100, Math.max(0, per100));
-//
-//     const per50 = Math.floor(per100 / 2);
-//
-//     line += `${per100}% [`;
-//     line += '#'.repeat(per50);
-//     line += `${' '.repeat(50 - per50)}]`;
-//   } else {
-//     // eslint-disable-next-line no-plusplus
-//     line += '.'.repeat(progressTicks++ % 50);
-//   }
-//
-//   el.textContent = line;
-// };
+const showProgress = (e) => {
+  const el = document.getElementById('state-value');
 
-// emulator.add_listener('download-progress', showProgress);
+  if (e.file_name.endsWith('.wasm')) {
+    const parts = e.file_name.split('/');
+    el.textContent = `fetching ${parts[parts.length - 1]} ...`;
+    return;
+  }
+
+  if (e.file_index === e.file_count - 1 && e.loaded >= e.total - 2048) {
+    // last file is (almost) loaded
+    el.textContent = 'starting...';
+    return;
+  }
+
+  let line = 'downloading image';
+
+  if (typeof e.file_index === 'number' && e.file_count) {
+    line += `[${e.file_index + 1}/${e.file_count}] `;
+  }
+
+  if (e.total && typeof e.loaded === 'number') {
+    let per100 = Math.floor((e.loaded / e.total) * 100);
+    per100 = Math.min(100, Math.max(0, per100));
+    const prcessBar = document.getElementById('progress-percent');
+    if (prcessBar) {
+      prcessBar.style.width = `${per100}%`;
+    }
+  }
+
+  el.textContent = line;
+};
+
+emulator.add_listener('download-progress', showProgress);

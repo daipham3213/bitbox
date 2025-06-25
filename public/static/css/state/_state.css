@@ -1,2 +1,10 @@
 /* State styles: Styles that describe the state of elements (e.g., active, hidden) */
 /* Example: .is-hidden */
+
+.is-stats-hidden {
+  display: none !important;
+}
+
+.is-hidden {
+  display: none !important;
+}
