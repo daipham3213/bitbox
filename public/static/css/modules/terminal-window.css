@@ -1,0 +1,20 @@
+/* Module: Terminal Window */
+.m-terminal-window {
+  background-color: #282C34;
+  color: #ABB2BF;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 64rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full screen height for mobile */
+}
+
+/* Media query for responsive height of the terminal window */
+@media (min-width: 768px) {
+  .m-terminal-window {
+    height: 80vh; /* 80% of viewport height for computer screens */
+  }
+}

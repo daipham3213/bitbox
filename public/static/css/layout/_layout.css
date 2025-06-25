@@ -1,0 +1,8 @@
+/* Layout styles: High-level page structure and responsiveness */
+.l-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}

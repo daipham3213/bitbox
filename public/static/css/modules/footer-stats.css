@@ -1,0 +1,41 @@
+/* Module: Footer Stats */
+.m-footer-stats {
+  background-color: #21252B;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  align-items: center;
+  gap: 1rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.6rem;
+  border-top: 1px solid #374151;
+  min-height: 32px;
+}
+
+@media (min-width: 768px) {
+  .m-footer-stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.m-footer-stats__item {
+  /* Base for stat items */
+}
+
+.m-footer-stats__text-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.125rem;
+}
+
+.m-footer-stats__item--network {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.m-footer-stats__network-speed {
+  /* Base style */
+}
