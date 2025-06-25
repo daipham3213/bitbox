@@ -18,3 +18,7 @@
 .m-progress-bar__fill--cpu {
   background-color: #C678DD;
 }
+
+.m-progress-bar__fill--memory {
+  background-color: #78ddc5;
+}

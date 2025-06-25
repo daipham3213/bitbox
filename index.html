@@ -65,17 +65,17 @@
   </main>
 
   <footer class="m-footer-stats">
-    <div class="m-footer-stats__item">
+    <div class="m-footer-stats__item is-stats-hidden">
       <div class="m-footer-stats__text-row">
         <span>RAM</span>
         <span>18MB/128MB</span>
       </div>
       <div class="m-progress-bar">
-        <div class="m-progress-bar__fill m-progress-bar__fill--disk" style="width: 12.8%;"></div>
+        <div class="m-progress-bar__fill m-progress-bar__fill--memory" style="width: 12.8%;"></div>
       </div>
     </div>
 
-    <div class="m-footer-stats__item">
+    <div class="m-footer-stats__item is-stats-hidden">
       <div class="m-footer-stats__text-row">
         <span>CPU</span>
         <span>17%</span>
@@ -85,9 +85,19 @@
       </div>
     </div>
 
-    <div class="m-footer-stats__item m-footer-stats__item--network">
+    <div class="m-footer-stats__item m-footer-stats__item--network is-stats-hidden">
       <span class="m-footer-stats__network-speed">&darr; 42.42 KB/s</span>
       <span class="m-footer-stats__network-speed">&uarr; 13.37 KB/s</span>
+    </div>
+
+    <div id="progress-bar" class="m-footer-stats__item">
+      <div class="m-footer-stats__text-row">
+        <span>STATE</span>
+        <span id="state-value">loading...</span>
+      </div>
+      <div class="m-progress-bar">
+        <div id="progress-percent" class="m-progress-bar__fill m-progress-bar__fill--disk" style="width: 0;"></div>
+      </div>
     </div>
   </footer>
 
