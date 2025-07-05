@@ -29,7 +29,8 @@
         "devDependencies": true
       }
     ],
-    "import/unambiguous": "off"
+    "import/unambiguous": "off",
+    "no-bitwise": ["error", { "allow": ["~", "&", "|"] }]
   },
   "settings": {
     "import/resolver": {
