@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +11,9 @@
   <meta name="email" content="daipham.3213@gmail.com" />
   <meta name="author" content="Dai Pham" />
   <meta name="description"
-        content="A modern, flat, and responsive static web page mimicking a macOS-style terminal UI, built with HTML and custom CSS." />
+    content="A modern, flat, and responsive static web page mimicking a macOS-style terminal UI, built with HTML and custom CSS." />
   <meta name="keywords"
-        content="BitBox, Browser VM, Virtual Machine, WebAssembly, V86, x86, WASM/WASI, Terminal, UI, Frontend, Developer, Portfolio" />
+    content="BitBox, Browser VM, Virtual Machine, WebAssembly, V86, x86, WASM/WASI, Terminal, UI, Frontend, Developer, Portfolio" />
   <meta name="github" content="https://github.com/daipham3213">
   <meta name="opendev.org" content="https://review.opendev.org/q/owner:daipham.3213@gmail.com">
   <meta name="linkedin" content="www.linkedin.com/in/daipham-3213">
@@ -28,84 +29,79 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 </head>
+
 <body class="l-body">
 
-<div class="m-terminal-window">
+  <div class="m-terminal-window">
 
-  <header class="m-title-bar">
-    <div class="m-title-bar__buttons">
-      <div class="m-title-bar__button m-title-bar__button--close">
-        <svg class="m-title-bar__button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
+    <header class="m-title-bar">
+      <div class="m-title-bar__buttons">
+        <div class="m-title-bar__button m-title-bar__button--close">
+          <svg class="m-title-bar__button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </div>
+        <div class="m-title-bar__button m-title-bar__button--minimize">
+          <svg class="m-title-bar__button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 12H4"></path>
+          </svg>
+        </div>
+        <div class="m-title-bar__button m-title-bar__button--maximize">
+          <svg class="m-title-bar__button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+              d="M4 8V4h4m12 0h-4v4m0 8v4h-4M4 16v4h4"></path>
+          </svg>
+        </div>
       </div>
-      <div class="m-title-bar__button m-title-bar__button--minimize">
-        <svg class="m-title-bar__button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 12H4"></path>
-        </svg>
-      </div>
-      <div class="m-title-bar__button m-title-bar__button--maximize">
-        <svg class="m-title-bar__button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                d="M4 8V4h4m12 0h-4v4m0 8v4h-4M4 16v4h4"></path>
-        </svg>
-      </div>
-    </div>
-    <div class="m-title-bar__text">BitBox &mdash; Browser VM</div>
-  </header>
+      <div class="m-title-bar__text">BitBox &mdash; Browser VM</div>
+    </header>
 
-  <main class="m-terminal-content" id="terminal-main-content">
-    <div id="terminal" class="terminal"></div>
-    <div id="serial" class="serial">
-      <div id="serial-output" class="serial-output">
-        <h6>Loading resources, please wait...</h6>
+    <main class="m-terminal-content" id="terminal-main-content">
+      <div id="terminal" class="terminal"></div>
+      <div id="serial" class="serial">
+        <div id="serial-output" class="serial-output">
+          <h6>Loading resources, please wait...</h6>
+        </div>
+        <canvas id="serial-canvas" width="800" height="600"></canvas>
       </div>
-      <canvas id="serial-canvas" width="800" height="600"></canvas>
-    </div>
-  </main>
+    </main>
 
-  <footer class="m-footer-stats">
-    <div class="m-footer-stats__item is-stats-hidden">
-      <div class="m-footer-stats__text-row">
-        <span>RAM</span>
-        <span>18MB/128MB</span>
-      </div>
-      <div class="m-progress-bar">
-        <div class="m-progress-bar__fill m-progress-bar__fill--memory" style="width: 12.8%;"></div>
-      </div>
-    </div>
+    <footer class="m-footer-stats">
 
-    <div class="m-footer-stats__item is-stats-hidden">
-      <div class="m-footer-stats__text-row">
-        <span>CPU</span>
-        <span>17%</span>
+      <div id="progress-bar" class="m-footer-stats__item">
+        <div class="m-footer-stats__text-row">
+          <span>STATE</span>
+          <span id="emulator-state">loading...</span>
+        </div>
+        <div class="m-progress-bar">
+          <div id="emulator-state-progress" class="m-progress-bar__fill m-progress-bar__fill--disk" style="width: 0;">
+          </div>
+        </div>
       </div>
-      <div class="m-progress-bar">
-        <div class="m-progress-bar__fill m-progress-bar__fill--cpu" style="width: 17%;"></div>
+
+      <div class="m-footer-stats__item m-footer-stats__item--network is-stats-hidden">
+        <span id="emulator-uptime">🟢 0s</span>
+        <span> ╎ </span>
+        <span id="emulator-nw-down" class="m-footer-stats__network-speed">▼ 0B/s</span>
+        <span id="emulator-nw-up" class="m-footer-stats__network-speed">▲ 0B/s</span>
       </div>
-    </div>
 
-    <div class="m-footer-stats__item m-footer-stats__item--network is-stats-hidden">
-      <span class="m-footer-stats__network-speed">&darr; 42.42 KB/s</span>
-      <span class="m-footer-stats__network-speed">&uarr; 13.37 KB/s</span>
-    </div>
-
-    <div id="progress-bar" class="m-footer-stats__item">
-      <div class="m-footer-stats__text-row">
-        <span>STATE</span>
-        <span id="state-value">loading...</span>
+      <div class="m-footer-stats__item m-footer-stats__item--file-picker is-stats-hidden">
+        <div class="tooltip">
+          <button class="m-footer-stats__item--button">
+            <span>📂</span>
+          </button>
+          <span class="tooltip-text">File Picker</span>
+        </div>
       </div>
-      <div class="m-progress-bar">
-        <div id="progress-percent" class="m-progress-bar__fill m-progress-bar__fill--disk" style="width: 0;"></div>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
-</div>
+  </div>
 
-<!-- Custom JavaScript Modules -->
-<script src="/v86/libv86.js"></script>
-<script type="module" src="/src/main.js"></script>
+  <!-- Custom JavaScript Modules -->
+  <script src="/v86/libv86.js"></script>
+  <script type="module" src="/src/main.js"></script>
 
 </body>
+
 </html>

@@ -1,79 +1,38 @@
 import { loadAddons, override } from './terminal';
-import registerUploadFilesModal from './upload-files';
+import { $, formatTimestamp, humanFileSize } from './utils';
 
-override();
+const state = {
+  started: false,
+  terminal: $('terminal'),
+  terminal_display_mode: $('terminal').style.display,
+  serial: $('serial'),
+  emulator_uptime: $('emulator-uptime'),
+  emulator_state: $('emulator-state'),
+  emulator_state_progress: $('emulator-state-progress'),
+  emulator_ram_usage: $('emulator-ram-usage'),
+  emulator_ram_usage_bar: $('emulator-ram-usage-bar'),
+  emulator_cpu_usage: $('emulator-cpu-usage'),
+  emulator_cpu_usage_bar: $('emulator-cpu-usage-bar'),
+  network_up: $('emulator-nw-up'),
+  network_down: $('emulator-nw-down'),
+  emulator: null,
+  last_tick: 0,
+  running_time: 0,
+  interval: null,
+  bytes_transmitted: [0, 0],
+  bytes_received: [0, 0],
+};
 
-const terminalElement = document.getElementById('terminal');
-const serial = document.getElementById('serial');
-const currentDisplay = terminalElement.style.display;
-
-terminalElement.style.display = 'none';
-serial.style.display = 'block';
-
-window.started = false;
-
-const emulator = new window.V86({
-  wasm_path: '/v86/v86.wasm',
-  screen_container: serial,
-  serial_container_xtermjs: terminalElement,
-  memory_size: import.meta.env.VITE_EMULATOR_RAM * 1024 ** 2,
-  vga_memory_size: import.meta.env.VITE_EMULATOR_VGA * 1024 ** 2,
-  bios: { url: '/bios/seabios.bin' },
-  vga_bios: { url: '/bios/vgabios.bin' },
-  cdrom: {
-    url: import.meta.env.VITE_ROOTFS_ISO,
-    async: false,
-  },
-  filesystem: {
-    basefs: '/contents.json',
-  },
-  autostart: true,
-  disable_keyboard: true,
-  disable_speaker: true,
-  network_relay_url: import.meta.env.VITE_NETWORK_RELAY,
-  cmdline: 'tsc=reliable mitigations=off random.trust_cpu=on',
-});
-
-if (import.meta.env.DEV) {
-  window.emulator = emulator;
-}
-
-emulator.add_listener('serial0-output-byte', (byte) => {
-  const char = String.fromCharCode(byte);
-
-  if (char === '$' || char === '#' || char === ':') {
-    if (!window.started) {
-      window.started = true;
-      terminalElement.style.display = currentDisplay;
-      serial.style.display = 'none';
-
-      document
-        .querySelectorAll('.is-stats-hidden')
-        .forEach((el) => el.classList.remove('is-stats-hidden'));
-
-      document.querySelectorAll('#progress-bar').forEach((el) => {
-        el.classList.add('is-hidden');
-      });
-
-      loadAddons(emulator.serial_adapter.term);
-      registerUploadFilesModal({ emulator });
-      terminalElement.focus();
-    }
-  }
-});
-
-const showProgress = (e) => {
-  const el = document.getElementById('state-value');
-
+const onBooting = (e) => {
   if (e.file_name.endsWith('.wasm')) {
     const parts = e.file_name.split('/');
-    el.textContent = `fetching ${parts[parts.length - 1]} ...`;
+    state.emulator_state.textContent = `fetching ${parts[parts.length - 1]} ...`;
     return;
   }
 
   if (e.file_index === e.file_count - 1 && e.loaded >= e.total - 2048) {
     // last file is (almost) loaded
-    el.textContent = 'starting...';
+    state.emulator_state.textContent = 'booting...';
     return;
   }
 
@@ -84,15 +43,131 @@ const showProgress = (e) => {
   }
 
   if (e.total && typeof e.loaded === 'number') {
-    let per100 = Math.floor((e.loaded / e.total) * 100);
-    per100 = Math.min(100, Math.max(0, per100));
-    const prcessBar = document.getElementById('progress-percent');
-    if (prcessBar) {
-      prcessBar.style.width = `${per100}%`;
+    const per100 = Math.floor((e.loaded / e.total) * 100);
+    if (state.emulator_state_progress) {
+      state.emulator_state_progress.style.width = `${Math.min(100, Math.max(0, per100))}%`;
     }
   }
 
-  el.textContent = line;
+  state.emulator_state.textContent = line;
 };
 
-emulator.add_listener('download-progress', showProgress);
+const onUpdateEmulatorInfo = () => {
+  // update emulator info on DOM
+
+  // network info
+  const trafficIn = state.bytes_received[0] - state.bytes_received[1];
+  const trafficOut = state.bytes_transmitted[0] - state.bytes_transmitted[1];
+  state.network_up.textContent = `▲ ${humanFileSize(trafficOut, true, 2)}/s`;
+  state.network_down.textContent = `▼ ${humanFileSize(trafficIn, true, 2)}/s`;
+};
+
+const onSerialOutput = (byte) => {
+  const chr = String.fromCharCode(byte);
+  if ((chr < ' ' && chr !== '\n' && chr !== '\t') || chr > '~') {
+    return;
+  }
+  if (!state.started) {
+    state.started = true;
+    state.terminal.style.display = state.terminal_display_mode;
+    state.serial.style.display = 'none';
+
+    document
+      .querySelectorAll('.is-stats-hidden')
+      .forEach((el) => el.classList.remove('is-stats-hidden'));
+
+    document
+      .querySelectorAll('#progress-bar')
+      .forEach((el) => el.classList.add('is-hidden'));
+
+    loadAddons(state.emulator.serial_adapter.term);
+
+    state.terminal.focus();
+    // unregister callback
+    state.emulator.remove_listener('serial0-output-byte', onSerialOutput);
+  }
+};
+
+const onStarted = () => {
+  const now = Date.now();
+  const deltaTime = now - state.last_tick;
+
+  // capture emulator states
+  // uptime
+  if (deltaTime) {
+    state.running_time += deltaTime;
+    state.last_tick = now;
+    state.emulator_uptime.textContent = `🟢 ${formatTimestamp((state.running_time / 1000) | 0)}`;
+  }
+
+  // network traffic
+  state.bytes_received = [state.bytes_received[0], state.bytes_received[0]];
+  state.bytes_transmitted = [
+    state.bytes_transmitted[0],
+    state.bytes_transmitted[0],
+  ];
+
+  // ram usage
+  // window.emulator.v86.cpu.memory_size;
+};
+
+const entry = () => {
+  // override terminal defaults
+  override();
+
+  // hide terminal and show serial by default
+  state.terminal.style.display = 'none';
+  state.serial.style.display = 'block';
+
+  // initialize emulator
+  const emulator = new window.V86({
+    wasm_path: '/v86/v86.wasm',
+    acpi: true,
+    screen_container: state.serial,
+    serial_container_xtermjs: state.terminal,
+    memory_size: import.meta.env.VITE_EMULATOR_RAM * 1024 ** 2,
+    vga_memory_size: import.meta.env.VITE_EMULATOR_VGA * 1024 ** 2,
+    bios: { url: '/bios/seabios.bin' },
+    vga_bios: { url: '/bios/vgabios.bin' },
+    cdrom: {
+      url: import.meta.env.VITE_ROOTFS_ISO,
+      async: false,
+    },
+    filesystem: {
+      basefs: '/contents.json',
+    },
+    autostart: true,
+    disable_keyboard: true,
+    disable_speaker: true,
+    network_relay_url: import.meta.env.VITE_NETWORK_RELAY,
+    cmdline: 'tsc=reliable mitigations=off random.trust_cpu=on',
+  });
+
+  state.emulator = emulator;
+  if (import.meta.env.DEV) {
+    window.emulator = emulator;
+    window.state = state;
+  }
+
+  emulator.add_listener('download-progress', onBooting);
+  emulator.add_listener('serial0-output-byte', onSerialOutput);
+
+  emulator.add_listener('emulator-started', () => {
+    state.last_tick = Date.now();
+    state.interval = setInterval(onStarted, 1000);
+
+    // ensure that current captured state is different from previous
+    setTimeout(() => {
+      setInterval(onUpdateEmulatorInfo, 1000);
+    }, 500);
+  });
+
+  emulator.add_listener('eth-receive-end', (args) => {
+    state.bytes_received[0] += args[0];
+  });
+  emulator.add_listener('eth-transmit-end', (args) => {
+    state.bytes_transmitted[0] += args[0];
+  });
+};
+
+entry();

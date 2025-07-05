@@ -1,0 +1,55 @@
+/* Tooltip styles */
+.tooltip {
+    position: relative;
+    /* Allows positioning of tooltip text relative to this container */
+    display: inline-block;
+    /* Ensures it wraps content and allows proper positioning */
+}
+
+.tooltip .tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 3;
+    /* Above button content */
+    bottom: 125%;
+    /* Position the tooltip above the button */
+    left: 50%;
+    margin-left: -16px;
+    /* Center the tooltip */
+    transition: opacity 0.3s, visibility 0.3s;
+    font-size: 0.6rem;
+    /* Smaller font for tooltip */
+}
+
+.tooltip .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+@media (max-width: 600px) {
+    .tooltip .tooltip-text {
+        left: 50%;
+        transform: translateX(-50%);
+        /* Ensure centering on smaller screens */
+        margin-left: 0;
+        /* Reset margin-left */
+    }
+}
