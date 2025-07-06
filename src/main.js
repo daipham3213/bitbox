@@ -9,10 +9,7 @@ const state = {
   emulator_uptime: $('emulator-uptime'),
   emulator_state: $('emulator-state'),
   emulator_state_progress: $('emulator-state-progress'),
-  emulator_ram_usage: $('emulator-ram-usage'),
-  emulator_ram_usage_bar: $('emulator-ram-usage-bar'),
-  emulator_cpu_usage: $('emulator-cpu-usage'),
-  emulator_cpu_usage_bar: $('emulator-cpu-usage-bar'),
+  send_file_button: $('emulator-9p-files-send-btn'),
   network_up: $('emulator-nw-up'),
   network_down: $('emulator-nw-down'),
   emulator: null,
@@ -106,9 +103,22 @@ const onStarted = () => {
     state.bytes_transmitted[0],
     state.bytes_transmitted[0],
   ];
+};
 
-  // ram usage
-  // window.emulator.v86.cpu.memory_size;
+const onInitFilesystem = () => {
+  console.log('9p filesystem initialized');
+  state.send_file_button.addEventListener('change', (event) => {
+    Array.from(event.target.files).forEach((file) => {
+      const loader = new FileReader();
+      loader.onload = (f) => {
+        const buffer = f.target.result;
+        const path = `/daiplg/${file.name}`;
+        return state.emulator.create_file(path, new Uint8Array(buffer));
+      };
+      loader.readAsArrayBuffer(file);
+    });
+    event.target.blur();
+  });
 };
 
 const entry = () => {
@@ -168,6 +178,8 @@ const entry = () => {
   emulator.add_listener('eth-transmit-end', (args) => {
     state.bytes_transmitted[0] += args[0];
   });
+
+  emulator.add_listener('9p-attach', onInitFilesystem);
 };
 
 entry();

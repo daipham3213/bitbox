@@ -1,14 +1,12 @@
-/* Tooltip styles */
-.tooltip {
+.m-tooltip {
     position: relative;
-    /* Allows positioning of tooltip text relative to this container */
     display: inline-block;
-    /* Ensures it wraps content and allows proper positioning */
 }
 
-.tooltip .tooltip-text {
+.m-tooltip__text {
     visibility: hidden;
     opacity: 0;
+    width: 120px;
     background-color: #555;
     color: #fff;
     text-align: center;
@@ -16,40 +14,31 @@
     padding: 5px 0;
     position: absolute;
     z-index: 3;
-    /* Above button content */
+    /* Above button/input content */
     bottom: 125%;
-    /* Position the tooltip above the button */
+    /* Position above the element */
     left: 50%;
-    margin-left: -16px;
+    transform: translateX(-50%);
     /* Center the tooltip */
     transition: opacity 0.3s, visibility 0.3s;
-    font-size: 0.6rem;
-    /* Smaller font for tooltip */
+    font-size: 0.5rem;
+    margin-left: 0;
+    /* Reset margin-left from previous version */
 }
 
-.tooltip .tooltip-text::after {
+.m-tooltip__text::after {
     content: "";
     position: absolute;
     top: 100%;
-    /* At the bottom of the tooltip */
     left: 50%;
-    margin-left: -5px;
+    transform: translateX(-50%);
+    /* Center the arrow */
     border-width: 5px;
     border-style: solid;
     border-color: #555 transparent transparent transparent;
 }
 
-.tooltip:hover .tooltip-text {
+.m-tooltip:hover .m-tooltip__text {
     visibility: visible;
     opacity: 1;
-}
-
-@media (max-width: 600px) {
-    .tooltip .tooltip-text {
-        left: 50%;
-        transform: translateX(-50%);
-        /* Ensure centering on smaller screens */
-        margin-left: 0;
-        /* Reset margin-left */
-    }
 }
