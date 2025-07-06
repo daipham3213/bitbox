@@ -1,0 +1,54 @@
+.m-button {
+    background-color: transparent;
+    border: none;
+    color: #61AFEF;
+    /* Default text color for this button type */
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.3s ease-in-out;
+    min-width: 180px;
+}
+
+.m-button__content {
+    position: relative;
+    z-index: 2;
+    /* Ensures content is on top of pseudo-elements */
+    color: #ffffff;
+    /* White text/icon color for content */
+    display: flex;
+    /* For icon and text alignment */
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    /* Visual padding for the clickable area */
+}
+
+.m-button__icon {
+    font-size: 1.25rem;
+}
+
+.m-button:hover {
+    background-color: rgba(97, 175, 239, 0.1);
+    transform: scale(1.05);
+}
+
+.m-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(97, 175, 239, 0.5);
+}
+
+.m-button:active {
+    background-color: rgba(97, 175, 239, 0.2);
+}
+
+@media (max-width: 600px) {
+    .m-button {
+        min-width: unset;
+        width: 90%;
+    }
+}

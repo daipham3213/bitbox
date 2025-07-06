@@ -1,0 +1,53 @@
+.o-spinning-border {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    /* Ensures content is above pseudo-elements */
+}
+
+.o-spinning-border::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg,
+            #ff0000, #ffa500, #ffff00, #008000, #0000ff, #4b0082, #ee82ee, #ff0000);
+    animation: spin 4s linear infinite;
+    z-index: -1;
+    /* Place behind the inner content */
+}
+
+.o-spinning-border::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    /* Border thickness */
+    left: 2px;
+    /* Border thickness */
+    right: 2px;
+    /* Border thickness */
+    bottom: 2px;
+    /* Border thickness */
+    background-color: #1f2937;
+    /* Inner background color */
+    border-radius: 0.25rem;
+    /* Matches button/container border-radius */
+    z-index: 0;
+    /* Above ::before but below content */
+}
+
+.o-shadow {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
