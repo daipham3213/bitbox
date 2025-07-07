@@ -145,6 +145,7 @@ const entry = () => {
     },
     filesystem: {
       basefs: '/contents.json',
+      baseurl: '/flat/',
     },
     autostart: true,
     disable_keyboard: true,

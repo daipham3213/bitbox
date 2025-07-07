@@ -16,9 +16,6 @@ const override = () => {
           foreground: '#ABB2BF', // Default text color
           cursor: '#ABB2BF', // Cursor color
           selectionBackground: '#61AFEF', // Highlight selection
-          blue: '#61AFEF', // For prompts if needed
-          green: '#98C379', // For prompts if needed
-          yellow: '#E5C07B', // For commands if needed
         },
       };
       super({ ...defaultOptions, ...options });
