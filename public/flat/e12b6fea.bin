@@ -1,0 +1,36 @@
+#!/bin/ash
+
+# check if interfaces has ip address 
+# filter out loopback and virtual interfaces
+# if not, run udhcpc on it
+_config_interfaces() {
+    local interfaces=$(ip -o link show | awk -F': ' '{print $2}')
+    local filtered_interfaces=$(echo "$interfaces" | grep -vE '^(lo|virbr|docker|sit)')
+    for interface in $filtered_interfaces; do
+        if ! ip addr show "$interface" | grep -q 'inet '; then
+            echo "No IP address found for interface: $interface. Running udhcpc..."
+            sudo udhcpc -i "$interface" 2>/dev/null || true
+        fi
+    done
+}
+
+_config_bundled_scrips() {
+    sudo chown -R daiplg /home/daiplg
+    sudo chmod +x /home/daiplg/selfctl
+    sudo mv /home/daiplg/selfctl /usr/bin/selfctl
+}
+
+_config_interfaces
+_config_bundled_scrips
+
+# tell user to run the selfctl command to know more about the system
+echo "
+This is a minimal system for running the V86 emulator.
+You can run the command \`selfctl\` to know more about the system.
+It will show you the available commands and their usage.
+
+Check the README.md file in the /home/daiplg directory for more information.
+
+The repository for this system is available at:
+https://github.com/daipham3213/bitbox.git
+"

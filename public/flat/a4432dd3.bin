@@ -1,0 +1,20 @@
+Welcome to BitBox!
+
+This is a custom buildroot running inside the V86 emulator. 
+It has been tweaked to be as fast as possible and has the following packages installed:
+
+busybox utilities
+sudo
+ash (default shell)
+ascii_invaders (shooting game)
+pfetch (recommended)
+static-get (package manager - not recommended for larger packages)
+...
+
+You CAN LOAD your own files into the /home/daiplg directory by using the "glowing"
+folder icon in bottom left corner of the screen.
+
+Credits:
+- V86 emulator: github.com/copy/v86
+- Busybox: busybox.net
+- Buildroot: buildroot.org
