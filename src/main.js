@@ -132,7 +132,7 @@ const entry = () => {
   // initialize emulator
   const emulator = new window.V86({
     wasm_path: '/v86/v86.wasm',
-    acpi: true,
+    acpi: false,
     screen_container: state.serial,
     serial_container_xtermjs: state.terminal,
     memory_size: import.meta.env.VITE_EMULATOR_RAM * 1024 ** 2,
@@ -150,7 +150,10 @@ const entry = () => {
     autostart: true,
     disable_keyboard: true,
     disable_speaker: true,
-    network_relay_url: import.meta.env.VITE_NETWORK_RELAY,
+    net_device: {
+      relay_url: import.meta.env.VITE_NETWORK_RELAY,
+      type: 'virtio',
+    },
     cmdline: 'tsc=reliable mitigations=off random.trust_cpu=on',
   });
 
