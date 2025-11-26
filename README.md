@@ -1,51 +1,38 @@
-# BitBox - Run VM in your browser
+# sv
 
-BitBox is linux shell in your browser by the power of WASM and [v86](https://github.com/copy/v86). It is a simple
-application that allows you to run a linux shell in your browser. It is useful for running simple commands and testing
-out things.
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-The VM image is based on [buildroot](https://buildroot.org/) - a minimal linux image with busybox and a few other
-utilities. You can find my configuration for buildroot in
-the [bitbox-buildroot](https://github.com/daipham3213/bitbox-buildroot)
-repository.
+## Creating a project
 
-<img src="docs/img/terminal.png">
+If you're seeing this, you've probably already done this step. Congrats!
 
-## Libraries and tools used
+```sh
+# create a new project in the current directory
+npx sv create
 
-- [v86](https://github.com/copy/v86)
-- [xterm.js](https://github.com/xtermjs/xterm.js)
-- [bun](https://bun.sh)
-- [vite](https://vitejs.dev/)
+# create a new project in my-app
+npx sv create my-app
+```
 
-# Requirements
+## Developing
 
-- [bun](https://bun.sh)
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-# How to run
+```sh
+npm run dev
 
-1. Clone this repository
-    ```bash
-    git clone
-    ```
-2. Install dependencies
-    ```bash
-    bun install
-    ```
-3. Run the server
-    ```bash
-    bun run dev
-    ```
-4. After that, a new tab will be opened in your browser with the application running.
-5. Enjoy!
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
 
-# Limitations
+## Building
 
-- It's a bit slow. It is fine for running simple programs but as soon as you try to run anything that requires cpu it
-  will slow down immensely because the cpu is emulated by v86.
-- No reliable package manager. You can use the bundled [static-get](docs/static-get.md)
+To create a production version of your app:
 
-# Internet
+```sh
+npm run build
+```
 
-- This VM uses copy's proxy for internet which is rate limited and does not support https
-- Try not to use it. Instead, consider either manually uploading files or using your own proxy.
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
