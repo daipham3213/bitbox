@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	import { Terminal } from '@xterm/xterm';
 	import { ClipboardAddon } from '@xterm/addon-clipboard';
@@ -41,7 +41,8 @@
 			fontFamily: 'Fira Code, monospace',
 			fontSize: 14,
 			theme: { background: bg || '#111111' },
-			allowProposedApi: true
+			allowProposedApi: true,
+			allowTransparency: true
 		});
 		terminal.loadAddon(webglAddon);
 		terminal.loadAddon(fitAddon);
@@ -59,6 +60,7 @@
 		});
 
 		terminalRef?.(terminal);
+
 		window.addEventListener('resize', handleResize);
 		if (autofocus) terminal.focus();
 		return () => {
@@ -70,7 +72,7 @@
 		terminal?.dispose();
 	});
 
-	export function write(data: string | Uint8Array) {
+	export function write(data: string | Uint8Array<ArrayBuffer>) {
 		terminal?.write(data);
 	}
 </script>
@@ -78,8 +80,8 @@
 <div bind:this={container} class="h-full w-full"></div>
 
 <style>
-	/* xterm attaches its own .xterm element dynamically */
-	:global(.xterm) {
-		height: 100%;
-	}
+    /* xterm attaches its own .xterm element dynamically */
+    :global(.xterm) {
+        height: 100%;
+    }
 </style>

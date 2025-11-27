@@ -1,6 +1,17 @@
 import { V86 } from '$lib/v86';
 import type { SystemStats } from '$lib/stores/SystemStats.svelte';
 
+interface V86Options {
+	memorySizeBytes?: number;
+	wasmPath?: string;
+	biosPath?: string;
+	vgaBiosPath?: string;
+	bzImagePath?: string;
+	autostart?: boolean;
+	relayUrl?: string;
+	cmdline?: string;
+}
+
 export class V86Controller {
 	v86: V86 | null = null;
 	loading = $state(true);
@@ -8,14 +19,14 @@ export class V86Controller {
 	statusText = $state('Initializing...');
 
 	private memorySize: number;
-	private options: any;
+	private options: V86Options;
 	private systemStats: SystemStats | null = null;
 
 	private startTime = 0;
 	private lastInstructionCounter = 0;
 	private lastPollTime = 0;
 
-	constructor(options: any) {
+	constructor(options: V86Options) {
 		this.options = options;
 		this.memorySize = options.memorySizeBytes || 128 * 1024 * 1024;
 	}
@@ -23,6 +34,7 @@ export class V86Controller {
 	init(terminalWrite: (data: Uint8Array) => void, stats: SystemStats) {
 		this.systemStats = stats;
 		this.v86 = new V86({
+			acpi: true,
 			memory_size: this.memorySize,
 			vga_memory_size: 16 * 1024 * 1024,
 			wasm_path: this.options.wasmPath || 'v86/v86.wasm',
@@ -40,17 +52,19 @@ export class V86Controller {
 				relay_url: this.options.relayUrl || 'https://wsnic.port0.org/',
 				type: 'virtio'
 			},
+			filesystem: {
+				basefs: '/fs.json',
+				baseurl: '/flat/',
+			},
 			cmdline: this.options.cmdline || 'tsc=reliable mitigations=off random.trust_cpu=on'
 		});
-
-		(window as any).v86 = this.v86;
 
 		this.v86.add_listener('serial0-output-byte', (e: unknown) => {
 			terminalWrite(Uint8Array.of(e as number));
 		});
 
 		this.v86.add_listener('download-progress', (e: unknown) => {
-			const progressEvent = e as any;
+			const progressEvent = e as { loaded: number; total: number };
 			if (progressEvent.total) {
 				this.progress = (progressEvent.loaded / progressEvent.total) * 100;
 				this.statusText = `Downloading resources... ${Math.round(this.progress)}%`;

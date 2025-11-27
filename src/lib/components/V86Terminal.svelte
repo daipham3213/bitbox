@@ -1,10 +1,10 @@
-<script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+<script lang="ts" xmlns="">
+	import { onDestroy, onMount } from 'svelte';
 	import SystemStats from '$lib/components/SystemStats.svelte';
 	import TerminalView from '$lib/components/TerminalView.svelte';
 	import Folder from '$lib/components/Folder.svelte';
 
-	import { V86Controller } from '$lib/v86/V86Controller.svelte';
+	import { V86Controller } from '$lib/stores/V86Controller.svelte.js';
 	import { SystemStats as SystemStatsClass } from '$lib/stores/SystemStats.svelte';
 
 	let terminalComponent: TerminalView;
@@ -12,7 +12,7 @@
 
 	const memorySize = 128 * 1024 * 1024; // 128MB
 
-	const v86Controller = new V86Controller({
+	const emulator = new V86Controller({
 		memorySizeBytes: memorySize,
 		wasmPath: 'v86/v86.wasm',
 		biosPath: 'bios/seabios.bin',
@@ -20,14 +20,14 @@
 		bzImagePath: 'bitbox-bzimage.bin',
 		relayUrl: 'https://wsnic.port0.org/',
 		autostart: true,
-		cmdline: 'tsc=reliable mitigations=off random.trust_cpu=on'
+		cmdline: 'tsc=reliable mitigations=off random.trust_cpu=on console=hvc0'
 	});
 
 	let showToast = $state(false);
 	let toastMessage = $state('');
 	let isDragging = $state(false);
 
-	function terminalWrite(data: Uint8Array) {
+	function terminalWrite(data: Uint8Array<ArrayBuffer>) {
 		terminalComponent?.write(data);
 	}
 
@@ -35,7 +35,7 @@
 		// Logic for requesting meminfo can be added to V86Controller if needed
 	}
 
-	function handleSelection(text: string) {
+	function handleSelection() {
 		toastMessage = 'Copied to clipboard!';
 		showToast = true;
 		setTimeout(() => {
@@ -65,11 +65,11 @@
 	}
 
 	onMount(() => {
-		v86Controller.init(terminalWrite, systemStats);
+		emulator.init(terminalWrite, systemStats);
 	});
 
 	onDestroy(() => {
-		v86Controller.destroy();
+		emulator.destroy();
 	});
 </script>
 
@@ -97,7 +97,7 @@
 				BITBOX-V86 // TERMINAL
 			</div>
 			<div class="flex items-center space-x-3">
-				<div class="text-xs text-[var(--color-text-subtle)] mr-2">{v86Controller.statusText}</div>
+				<div class="text-xs text-[var(--color-text-subtle)] mr-2">{emulator.statusText}</div>
 				<!-- Folder Button -->
 				<button
 					class="group relative p-1 rounded hover:bg-[var(--color-border)] transition-colors text-[var(--color-accent-blue)] hover:text-[var(--color-text-base)] hover:shadow-[var(--shadow-glow-blue)] cursor-pointer"
@@ -114,14 +114,14 @@
 		</div>
 
 		<!-- Terminal Area -->
-		<div class="flex-1 relative bg-[var(--color-bg-surface)]/50 min-h-0">
+		<div class="flex-1 relative bg-[var(--color-bg-surface)]/50 min-h-0 p-1">
 			<TerminalView
 				bind:this={terminalComponent}
-				onInput={(d) => v86Controller.sendInput(d)}
+				onInput={(d) => emulator.sendInput(d)}
 				onSelection={handleSelection}
 			/>
 
-			{#if v86Controller.loading}
+			{#if emulator.loading}
 				<div
 					class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[var(--color-bg-overlay-dark)] backdrop-blur-sm"
 				>
@@ -131,11 +131,11 @@
 					<div class="w-64 h-1 bg-[var(--color-border)] rounded-full overflow-hidden">
 						<div
 							class="h-full bg-[var(--color-accent-blue)] transition-all duration-300 ease-out"
-							style={`width:${v86Controller.progress}%`}
+							style={`width:${emulator.progress}%`}
 						></div>
 					</div>
 					<div class="mt-4 text-xs text-[var(--color-text-muted)] font-mono">
-						{v86Controller.statusText}
+						{emulator.statusText}
 					</div>
 				</div>
 			{/if}
